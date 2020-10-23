@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
@@ -8,7 +9,18 @@
  * @format
  */
 
-import React from 'react';
+import React, { Component, useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { RootStackNavigator,  RouteIdentifiers } from './src/_navigation/rootNavigator';
+//import { RootStackNavigator, RouteIdentifiers } from './src/_navigation';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Provider } from 'react-redux';
+import globalStyles from './src/styles/globalStyles';
+import { createStackNavigator } from '@react-navigation/stack'
+import { Home } from './src/screens/Home/test'
+//const Stack = createStackNavigator()
+//const RootStack = createStackNavigator()
+
 import {
   SafeAreaView,
   StyleSheet,
@@ -28,52 +40,65 @@ import {
 
 declare const global: {HermesInternal: null | {}};
 
-const App = () => {
-  return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
-  );
+type State = {
+  isRestarting : boolean
+  routeName: string;
+  routeParams: Object
+  routeKey: Object
+  navStack: Object
+  isConnected: any
+  initialized: boolean
+  isUpdating: boolean
+};
+
+
+
+export default class App extends Component<{}, State> {
+
+  constructor(props: any) {
+    super(props);
+
+    //this.isUserSignedInCheckCount = 0;
+    this.state = {
+      isRestarting: false,
+      routeName: '',
+      routeParams: {},
+      routeKey: '',
+      navStack: [],
+      isConnected: undefined,
+      initialized: false,
+      isUpdating: false
+    };
+  }
+
+  showLoadingState = () => {
+    const {
+      isRestarting, routeName, isUpdating
+    } = this.state;
+    const noInternet = this.state.isConnected === false;
+
+    return isUpdating ? !isUpdating : !routeName || isRestarting || noInternet;
+  }
+
+  navigationStacks = () => {
+    const {
+      routeName, routeParams, routeKey, navStack
+    } = this.state;
+
+    
+    return (
+        
+            <NavigationContainer>
+              {RootStackNavigator(routeName, routeParams, this.showLoadingState(), this.state.isUpdating)}
+            </NavigationContainer>
+        
+    );
+  }
+
+  render() {
+    return this.navigationStacks()
+  }
+  
 };
 
 const styles = StyleSheet.create({
@@ -115,4 +140,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+

@@ -1,4 +1,6 @@
 import 'react-native-gesture-handler';
+
+import SplashScreen from 'react-native-splash-screen';
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
@@ -58,6 +60,7 @@ export default class App extends Component<{}, State> {
   constructor(props: any) {
     super(props);
 
+    
     //this.isUserSignedInCheckCount = 0;
     this.state = {
       isRestarting: false,
@@ -69,6 +72,10 @@ export default class App extends Component<{}, State> {
       initialized: false,
       isUpdating: false
     };
+  }
+
+  componentDidMount() {
+    SplashScreen.hide()
   }
 
   showLoadingState = () => {

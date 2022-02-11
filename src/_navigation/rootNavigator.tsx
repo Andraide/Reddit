@@ -20,8 +20,9 @@ import {
 
 import { Home } from '../screens/Home/test'
 import { HomeSecond } from '../screens/HomeSecond/test' 
-import { Child } from '../screens/Child/test' 
+import Permissions from '../screens/Permissions/permissions' 
 import { ChildOne } from '../screens/Child1/test'
+import { NotificationPermissions } from '../screens/Permissions/notifications'
 
 export const RouteIdentifiers = {
     //Stacks
@@ -30,17 +31,21 @@ export const RouteIdentifiers = {
     
     //Screens
     child: { name: 'child', key: 'myScreenKey' },
-    childOne: { name: 'childOne', key: 'myChildOne' }
+    childOne: { name: 'childOne', key: 'myChildOne' },
+    cameraPermissions: { name: 'cameraPermission' },
+    notificationPermissions: { name: 'notificationPermissions' },
+    locationPermissions: { name: 'locationPermissions' }
 };
 
 const HomeStack = createStackNavigator();
 const HomeStackNavigator = () => (
     <HomeStack.Navigator
-      initialRouteName={RouteIdentifiers.home.name}
+      initialRouteName={RouteIdentifiers.cameraPermissions.name}
       headerMode={"none"}
     >
         <HomeStack.Screen name={RouteIdentifiers.home.name} component={Hoc(Home)}/>
-        <HomeStack.Screen name={RouteIdentifiers.child.name} component={Child}/>
+        <HomeStack.Screen name={RouteIdentifiers.cameraPermissions.name} component={Permissions}/>
+        <HomeStack.Screen name={RouteIdentifiers.notificationPermissions.name} component={NotificationPermissions}/>
     </HomeStack.Navigator>
 )
 

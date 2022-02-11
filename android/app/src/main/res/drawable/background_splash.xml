@@ -7,7 +7,7 @@
 
     <item
         android:width="200dp"
-        android:height="65dp"
+        android:height="0dp"
         android:drawable="@mipmap/icon"
         android:gravity="center" />
 

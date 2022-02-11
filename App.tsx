@@ -16,10 +16,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { RootStackNavigator,  RouteIdentifiers } from './src/_navigation/rootNavigator';
 //import { RootStackNavigator, RouteIdentifiers } from './src/_navigation';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { Provider } from 'react-redux';
 import globalStyles from './src/styles/globalStyles';
 import { createStackNavigator } from '@react-navigation/stack'
 import { Home } from './src/screens/Home/test'
+import { connect } from 'react-redux'
 //const Stack = createStackNavigator()
 //const RootStack = createStackNavigator()
 
@@ -55,7 +55,7 @@ type State = {
 
 
 
-export default class App extends Component<{}, State> {
+class App extends Component<{}, State> {
 
   constructor(props: any) {
     super(props);
@@ -107,6 +107,8 @@ export default class App extends Component<{}, State> {
   }
   
 };
+
+export default App;
 
 const styles = StyleSheet.create({
   scrollView: {

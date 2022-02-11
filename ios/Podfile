@@ -1,3 +1,5 @@
+
+
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
@@ -8,7 +10,13 @@ target 'TypesReduxNavigationRealm' do
 
   use_react_native!(:path => config["reactNativePath"])
 
+  permissions_path = '../node_modules/react-native-permissions/ios'
+
+  pod 'Permission-Camera', :path => "#{permissions_path}/Camera"
+  pod 'Permission-Notifications', :path => "#{permissions_path}/Notifications"
+  pod 'Permission-LocationAlways', :path => "#{permissions_path}/LocationAlways"
   pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
+  
 
   target 'TypesReduxNavigationRealmTests' do
     inherit! :complete

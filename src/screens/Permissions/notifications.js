@@ -24,74 +24,134 @@ class NotificationPermissions extends React.Component {
   
      constructor(props) {
        super(props)
+       this.state = {
+         editable: false,
+         isPermissionGranted: false
+       }
        
      }
     
     async componentDidMount() 
     {
         const { navigation } = this.props
-         
-        this.permissionSubscribe = permissionService.permissionSubscribe.subscribe( permissions => {
-          console.log("Editable", permissions) 
-          if(permissions.NOTIFICATIONS)
+        const { editable } = this.state
+
+        if(editable)
+        {
+          navigation.navigate(RouteIdentifiers.locationPermissions.name)
+        }
+
+        this.editableNotificationsSubscribe = permissionService.editableNotifications.subscribe( editable => {
+          if(editable.toString() == 'true')
           {
-              console.log("Entering!!!", permissions.NOTIFICATIONS)
-              navigation.navigate(RouteIdentifiers.notificationPermissions.name)
+              this.setState({editable: true})
           }
-          //this.setState({ editable }) 
-        })         
+          else
+          {
+              this.setState({editable: false})
+          }
+        })
+         
+        this.notificationsPermissionSubscribe = permissionService.permissionSubscribe.subscribe( permissions => {
+          
+          if(permissions.NOTIFICATIONS && permissionService.getEditableNotifications == false)
+          {
+            permissionService.setEditable('NOTIFICATIONS', true)
+              navigation.navigate(RouteIdentifiers.locationPermissions.name)
+          }
+        })
+        
+        let isPermissionGranted = await this.checkForPermissions()
+        this.setState({ isPermissionGranted })
     }
-     componentWillUnmount() {}
+
+    componentDidUpdate(prevProps, prevState, snapShot) 
+    {
+        const { navigation } = this.props
+        const { editable } = this.state
+        if(editable && prevState.editable != this.state.editable)
+        {
+            navigation.navigate(RouteIdentifiers.locationPermissions.name)
+        }
+    }
+
+     componentWillUnmount() 
+     {
+      this.notificationsPermissionSubscribe.unsubscribe()
+      this.editableNotificationsSubscribe.unsubscribe()
+     }
 
     async checkForPermissions()
     {
+      let result = ''
       checkNotifications().then(({ status, settings }) => 
       {
-        console.log("Cheking", status, "Cheking Settings", settings)
+        result = status
       })
-      //return isPermissionGranted
+      const isPermissionGranted = await checkResult(result)
+      return isPermissionGranted
     }
 
     async settings()
     {
-        console.log("Calling openSettings")
         await openSettings()
     }
 
     requestPermission()
     {
-        console.log("Pressed")
         const { navigation } = this.props
         
-        /*request(Platform.OS === 'ios' ? PERMISSIONS.IOS.CAMERA : PERMISSIONS.ANDROID.CAMERA).then((result) => {
-            //setPermissionResult(result)
-            if(checkResult(result))
+        requestNotifications(['alert', 'sound']).then(({ status, settings }) => 
+        {
+          if(status == 'granted')
             {
-                if(result == 'granted')
-                {
-                    //this.setState({ disabled: true })
-                  permissionService.setPermission('NOTIFICATIONS', true)
-                  navigation.navigate(RouteIdentifiers.notificationPermissions.name)
-                }
-                this.settings()
+              permissionService.setEditable('NOTIFICATIONS', true)
+              navigation.navigate(RouteIdentifiers.locationPermissions.name)
+                
             }
             else
             {
-                //"No available"
+                if(checkResult(status))
+                {
+                    this.settings()
+                }
+                else
+                {
+                    //"No available"
+                }
             }
-            console.log(result)
-        });*/
-        requestNotifications(['alert', 'sound']).then(({ status, settings }) => 
-        {
-          console.log("Status", status, "Settings", settings)
         })
     }
 
      render() {
        const { navigation } = this.props
-        const isGranted = this.checkForPermissions()
-        const title = isGranted ? 'Manage' : 'Allow'
+       const { isPermissionGranted, editable } = this.state
+        //const isGranted = this.checkForPermissions()
+        const title = isPermissionGranted ? 'Manage' : 'Allow'
+        if(this.state.editable)
+        {
+          return (
+            <View><Text>DONT MOUNT</Text></View>
+          )
+        }
+        else
+        {
+          return (
+            <View style={{ marginTop: 50, backgroundColor: 'blue' }}>
+              <Text>Notification permission</Text>
+              <Button
+                onPress = {() => { this.requestPermission() }}
+                title = {title}
+              />
+              <Button
+                onPress = {() => navigation.navigate(RouteIdentifiers.secondStack.name, { screen: RouteIdentifiers.childOne.name })}
+                title = "Cancel"
+              />
+            </View>   
+          )
+        }
        return (
+        editable ? null :
          <View style={{ marginTop: 50, backgroundColor: 'blue' }}>
            <Text>Notification permission</Text>
            <Button

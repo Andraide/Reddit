@@ -60,3 +60,22 @@ import {
       }
     return checkStatus;
   }
+
+  export async function checkNotificationStatus(status) {
+    var checkStatus = false;
+    switch (status) {
+        case RESULTS.GRANTED:
+          checkStatus = true;
+          break;
+        case RESULTS.DENIED:
+          checkStatus = true;
+          break;
+        case RESULTS.BLOCKED:
+          checkStatus = true;
+          break;
+        case RESULTS.UNAVAILABLE:
+          checkStatus = false;
+          break;
+      }
+    return checkStatus;
+  }

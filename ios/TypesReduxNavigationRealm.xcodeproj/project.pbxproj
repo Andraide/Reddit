@@ -194,7 +194,6 @@
 				8201CF8B33473EA77592C0FF /* Pods-TypesReduxNavigationRealm-tvOSTests.debug.xcconfig */,
 				F54B9B6D951C6478F967CC08 /* Pods-TypesReduxNavigationRealm-tvOSTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};

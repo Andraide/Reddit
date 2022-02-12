@@ -16,7 +16,8 @@ target 'TypesReduxNavigationRealm' do
   pod 'Permission-Notifications', :path => "#{permissions_path}/Notifications"
   pod 'Permission-LocationAlways', :path => "#{permissions_path}/LocationAlways"
   pod 'react-native-splash-screen', :path => '../node_modules/react-native-splash-screen'
-  
+
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
   target 'TypesReduxNavigationRealmTests' do
     inherit! :complete

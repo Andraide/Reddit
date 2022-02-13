@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet , Modal , View, Button , Text , Image , Dimensions } from 'react-native'
 import { TouchableOpacity ,TouchableHighlight } from 'react-native-gesture-handler'
+import DeviceInfo from 'react-native-device-info';
 import { RouteIdentifiers } from '../../_navigation/rootNavigator'
 import { checkMultiplePermissions, checkResult } from '../../components/checkPermissions'
 import {
@@ -12,17 +13,21 @@ import {
     openSettings
   } from 'react-native-permissions';
 import { permissionService  } from '../../_services/permissions.service'
+import { CancelButton } from '../../components/cancelButton';
+import Allow from '../../_assets/buttons/allow/Button.png'
+import CameraImage from '../../_assets/images/camera/Artwork.png'
 var widthScreen = Dimensions.get('window').width
 var heightScreen = Dimensions.get('window').height
   
 
-class Permissions extends React.Component {
+class CameraPermission extends React.Component {
   
      constructor(props) {
        super(props)
        this.state = {
 
-           editable: false
+           editable: false,
+           marginNotchTop: 0
        }
      }
 x
@@ -32,12 +37,29 @@ x
     {
          const { navigation } = this.props
          const { editable } = this.state
-         
 
+        let hasNotch = DeviceInfo.hasNotch();
+        this.setState({ hasNotch })
+        if(Platform.OS == 'ios' && hasNotch)
+        {
+            
+            this.setState({ marginNotchTop: heightScreen/20 })
+        }
+        else if(hasNotch)
+        {
+            this.setState({ marginNotchTop: StatusBar.currentHeight })
+        }
+         
+        console.log("Permission", permissionService.editableCamera)
          if(editable)
          {
             navigation.navigate(RouteIdentifiers.notificationPermissions.name)
          }
+
+        if(Platform.OS === 'android')
+        {
+            navigation.navigate(RouteIdentifiers.locationPermissions.name)
+        }
 
         this.editableCameraSubscribe = permissionService.editableCamera.subscribe( editable => {
             console.log("Seting camera state", editable)
@@ -84,7 +106,7 @@ x
         if(editable && prevState.editable != this.state.editable)
         {
             console.log("Navigate to notifications Update")
-            //navigation.navigate(RouteIdentifiers.notificationPermissions.name)
+            navigation.navigate(RouteIdentifiers.notificationPermissions.name)
         }
     }
 
@@ -149,7 +171,7 @@ x
 
      render() {
         const { navigation } = this.props
-        const { isPermissionGranted, editable } = this.state
+        const { isPermissionGranted, editable, marginNotchTop } = this.state
         const title = isPermissionGranted ? 'Manage' : 'Allow'
         console.log("Render", editable)
 
@@ -162,35 +184,66 @@ x
         else
         {
             return (
-                <View style={{ marginTop: 50, backgroundColor: 'blue' }}>
-                    <Text>Camera permission</Text>
-                    <Button
-                        onPress = {() => { this.requestPermission() }}
-                        title = {title}
-                    />
-                    <Button
-                        onPress = {() => navigation.navigate(RouteIdentifiers.secondStack.name, { screen: RouteIdentifiers.childOne.name })}
-                        title = "Cancel"
-                    />
-                </View>    
+                 <View style={{ flex: 1, flexDirection: 'column', marginTop: marginNotchTop }}>
+                     <View style={{ flex: 0.6, alignItems: 'center', justifyContent: 'center' }}>
+                         <Image
+                            source={CameraImage}
+                         />
+                     </View>
+                     <View style={{ flex: 0.2, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                        <View style={{ flex: 0.3, alignItems: 'center', justifyContent: 'center' }}>
+                            <Text style={{ textAlign: 'center', fontSize: 20 }}>Camera Access</Text>
+                        </View>
+                        <View style={{ flex: 0.7, alignItems: 'center', justifyContent: 'flex-start' }}>
+                            <Text style={{ textAlign: 'center' }}>Please allow access to {"\n"} your camera to take {"\n"} photos</Text>
+
+                        </View>
+
+                     </View>
+                     <View style={{ flex: 0.1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                         <View style={{ backgroundColor: 'transparent',flex: 0.4, width: widthScreen - 200, alignItems: 'center', justifyContent: 'center', borderRadius: 60 }}>
+                            <TouchableOpacity onPress={() => { this.requestPermission() }}>
+                                <Image
+                                    source={Allow}
+                                />
+                            </TouchableOpacity>
+                         </View>
+                         <View style={{ flex: 0.2 }}></View>
+                         <View style={{ flex: 0.4,alignItems: 'center', justifyContent: 'center' }}>
+                             <CancelButton 
+                                title={'Cancel'} 
+                                onPress={() => {
+                                    permissionService.setEditable('CAMERA', true)
+                                    navigation.navigate(RouteIdentifiers.notificationPermissions.name)
+                                }}
+                            />
+                         </View>
+                            
+                     </View>
+
+                 </View>
             )
         }
-        return (
-            editable ? null :
-            <View style={{ marginTop: 50, backgroundColor: 'blue' }}>
-            <Text>Camera permission</Text>
-            <Button
-                onPress = {() => { this.requestPermission() }}
-                title = {title}
-            />
-            <Button
-                onPress = {() => navigation.navigate(RouteIdentifiers.secondStack.name, { screen: RouteIdentifiers.childOne.name })}
-                title = "Cancel"
-            />
-            </View>
-        )
+        /*
+        <TouchableOpacity>
+                                 <View style={{ flex:1, alignItems: 'center', justifyContent: 'center' }}>
+                                    <Text style={{ color: '#BFBFBF' }}>Cancel</Text>
+                                 </View>
+                             </TouchableOpacity>
+        */
+        /*
+        <Button
+                                onPress = {() => { 
+                                    permissionService.setEditable('CAMERA', true)
+                                    navigation.navigate(RouteIdentifiers.notificationPermissions.name) 
+                                }}
+                                title = 'Cancel'
+                                color = '#000'
+                            />
+        */
+        
      }
    }
 
   
-  export default Permissions 
+  export { CameraPermission }

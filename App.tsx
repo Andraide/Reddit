@@ -25,7 +25,7 @@ import { permissionService  } from './src/_services/permissions.service'
 
 import { Home } from './src/screens/Home/home'
 import { HomeSecond } from './src/screens/HomeSecond/test' 
-import Permissions from './src/screens/Permissions/permissions' 
+import { CameraPermission } from './src/screens/Permissions/camera' 
 import { ChildOne } from './src/screens/Child1/test'
 import { NotificationPermissions } from './src/screens/Permissions/notifications'
 import LocationPermissions from './src/screens/Permissions/locations'
@@ -89,7 +89,7 @@ const AuthStack = () => {
             initialRouteName={RouteIdentifiers.cameraPermissions.name}
             headerMode={"none"}
           >
-            <SecondStack.Screen name={RouteIdentifiers.cameraPermissions.name} component={Permissions}/>
+            <SecondStack.Screen name={RouteIdentifiers.cameraPermissions.name} component={CameraPermission}/>
             <SecondStack.Screen name={RouteIdentifiers.notificationPermissions.name} component={NotificationPermissions}/>
             <SecondStack.Screen name={RouteIdentifiers.locationPermissions.name} component={LocationPermissions}/>
           </SecondStack.Navigator>
@@ -239,7 +239,7 @@ class App extends Component<{}, State> {
           >
             <SecondStack.Screen name={RouteIdentifiers.cameraPermissions.name} component={Permissions}/>
             <SecondStack.Screen name={RouteIdentifiers.notificationPermissions.name} component={NotificationPermissions}/>
-            <SecondStack.Screen name={RouteIdentifiers.locationPermissions.name} component={LocationPermissions}/>
+            <SecondStack.Screen name={RouteIdentifiers.locationPermissions.name} component={LocationPermissions} options={{ animationEnabled: false }}/>
           </SecondStack.Navigator>
     )
   }

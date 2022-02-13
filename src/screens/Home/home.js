@@ -17,12 +17,12 @@
   
   
   const renderItem = ({ item }) => {
-    
+    console.log("Flatlist")
     const { post_hint, title, url, score } = item.data
     if(post_hint == 'image' && url)
     {
         return ( 
-            <View style={{ flex: 1, backgroundColor: '#FFFFFF', flexDirection: 'column', height: heightScreen/3, width: widthScreen - 40, alignItems: 'center', justifyContent: 'center', marginTop: 20, borderRadius: 20, borderColo: '#000', borderWidth: 0.1 }}>
+            <View style={{ flex: 1, backgroundColor: 'transparent', flexDirection: 'column', height: heightScreen/3, width: widthScreen - 40, alignItems: 'center', justifyContent: 'center', marginTop: 20, borderRadius: 20, borderColor: '#000', borderWidth: 0.1 }}>
                 <View style={{ flex: 0.65, backgroundColor: 'transparent', alignItems: 'center', justifyContent: 'center', width: widthScreen - 40, borderRadius: 20 }}>
                 <Image
                     source={{uri: url}}
@@ -32,7 +32,7 @@
                 </View>
                 <View style={{ flex: 0.05 }}></View>
                 <View style={{ flex: 0.2, backgroundColor: 'transparent', flexDirection: 'row', alignItems: 'flex-start' }}>
-                    <View style={{ flex: 0.1, backgroundColor: 'transparent', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                    <View style={{ flex: 0.12, backgroundColor: 'transparent', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                         <View style={{ flex: 0.12, alignItems: 'center', justifyContent: 'center' }}>
                             <Image
                                 source={ArrowUp}
@@ -48,11 +48,12 @@
 
 
                     </View>
-                    <View style={{ flex: 0.9, backgroundColor: 'transparent' }}><Text adjustsFontSizeToFit={true} style={{ fontSize: 20 }}>{title}</Text></View>
+                    <View style={{ flex: 0.05 }}></View>
+                    <View style={{ flex: 0.77, backgroundColor: 'transparent' }}><Text adjustsFontSizeToFit={true} style={{ fontSize: 20 }}>{title}</Text></View>
                 </View>
                 <View style={{ flex: 0.1, flexDirection: 'row', alignItems: 'flex-start' }}>
-                    <View style={{ flex: 0.1 }}></View>
-                    <View style={{ flex: 0.9, flexDirection: 'row', alignItems: 'center' }}>
+                    <View style={{ flex: 0.17 }}></View>
+                    <View style={{ flex: 0.77, flexDirection: 'row', alignItems: 'center', backgroundColor: 'transparent' }}>
                         <View style={{ flex: 0.1 }}>
                             <Image
                                 source={CommentsIcon}
@@ -68,10 +69,14 @@
             </View> 
         )
     }
-    else if(post_hint == null && title == null && url == null && score == null)
-    {
+    
+  };
+
+
+  const renderItemVoid = ({ item }) => {
+    
         return ( 
-            <View style={{ flex: 1, backgroundColor: 'white', flexDirection: 'column', height: heightScreen/2, width: widthScreen - 40, alignItems: 'center', justifyContent: 'center', marginTop: 20, borderRadius: 20 }}>
+            <View style={{flex: 1, backgroundColor: 'white', flexDirection: 'column', height: heightScreen/2, width: widthScreen - 40, alignItems: 'center', justifyContent: 'center', marginTop: 20, borderRadius: 20 }}>
                 <View style={{ flex: 0.7 }}>
                     <Image
                         source={NoResultsImage}
@@ -89,7 +94,7 @@
 
             </View> 
         )
-    }
+    
     
   };
 
@@ -180,6 +185,7 @@
     render() {
         const { navigation } = this.props
         const { hasNotch, marginNotchTop, memes, noResults } = this.state
+        //console.log("Memes", memes)
      
         return (
                <View style={{ flex: 1, backgroundColor: '#FFFFFF', flexDirection: 'column', marginTop: marginNotchTop }}>
@@ -203,12 +209,12 @@
                     {memes && <FlatList
                         data={memes}
                         renderItem={renderItem}
-                        keyExtractor={item => item.id}
+                        keyExtractor={(item, index) => 'key' + index }
                     />}
                     {noResults && <FlatList
                         data={[{data: { post_hint: null, title: null, url: null, score: null }}]}
-                        renderItem={renderItem}
-                        keyExtractor={item => item.id}
+                        renderItem={renderItemVoid}
+                        keyExtractor={(item, index) => 'key' + index }
                     />}
                 </View>
             </View>

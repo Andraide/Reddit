@@ -20,7 +20,7 @@ import {
 
 import { Home } from '../screens/Home/test'
 import { HomeSecond } from '../screens/HomeSecond/test' 
-import Permissions from '../screens/Permissions/permissions' 
+import { CameraPermission } from '../screens/Permissions/camera' 
 import { ChildOne } from '../screens/Child1/test'
 import { NotificationPermissions } from '../screens/Permissions/notifications'
 import LocationPermissions from '../screens/Permissions/locations'

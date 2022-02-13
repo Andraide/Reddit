@@ -46,6 +46,8 @@ async function setEditable(key,value)
                 editableLocation.next(value)
                 break        
     }
+
+    return 'done'
 }
 
 async function getEditable(key)

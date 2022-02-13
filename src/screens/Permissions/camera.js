@@ -30,11 +30,12 @@ class CameraPermission extends React.Component {
            marginNotchTop: 0
        }
      }
-x
+
      
     
     async componentDidMount() 
     {
+        console.log("Mounted notifications!")
          const { navigation } = this.props
          const { editable } = this.state
 
@@ -42,7 +43,6 @@ x
         this.setState({ hasNotch })
         if(Platform.OS == 'ios' && hasNotch)
         {
-            
             this.setState({ marginNotchTop: heightScreen/20 })
         }
         else if(hasNotch)
@@ -50,70 +50,33 @@ x
             this.setState({ marginNotchTop: StatusBar.currentHeight })
         }
          
-        console.log("Permission", permissionService.editableCamera)
          if(editable)
          {
             navigation.navigate(RouteIdentifiers.notificationPermissions.name)
          }
 
-        if(Platform.OS === 'android')
-        {
-            navigation.navigate(RouteIdentifiers.locationPermissions.name)
-        }
-
-        this.editableCameraSubscribe = permissionService.editableCamera.subscribe( editable => {
-            console.log("Seting camera state", editable)
-            if(editable.toString() == 'true')
-            {
-                this.setState({editable: true})
-                console.log("State!!!!",editable)
-            }
-            else
-            {
-                console.log("Setting false state!!!!!")
-                this.setState({editable: false})
-            }
-        })
-
+        
         this.cameraPermissionSubscribe = permissionService.permissionSubscribe.subscribe( permissions => {
             if(permissions.CAMERA && permissionService.getEditableCamera === false)
             {
-                console.log("CAMERA SUBSCRIBER")
                 permissionService.setEditable('CAMERA', true)
-                console.log("permissionService.getEditable after setEditable", permissionService.getEditableCamera)
                 if(Platform.OS === 'android')
                 {
-                    navigation.navigate(RouteIdentifiers.locationPermissions.name)
+                    //navigation.navigate(RouteIdentifiers.locationPermissions.name)
                 }
                 else
                 {
-                    console.log("Navigate to notifications Subscribe", permissionService.getEditableCamera)
-
-                    navigation.navigate(RouteIdentifiers.notificationPermissions.name)
+                    //navigation.navigate(RouteIdentifiers.notificationPermissions.name)
                 }
             }
-
-            
-            
         })
     }
 
-    componentDidUpdate(prevProps, prevState, snapShot) 
-    {
-        const { navigation } = this.props
-        const { editable } = this.state
-        console.log("EDITABLE STATE", editable)
-        if(editable && prevState.editable != this.state.editable)
-        {
-            console.log("Navigate to notifications Update")
-            navigation.navigate(RouteIdentifiers.notificationPermissions.name)
-        }
-    }
+    
 
      componentWillUnmount() 
      {
          this.cameraPermissionSubscribe.unsubscribe()
-         this.editableCameraSubscribe.unsubscribe()
      }
 
      async checkForPermissions()
@@ -123,7 +86,6 @@ x
           ? [PERMISSIONS.IOS.CAMERA]
           : [PERMISSIONS.ANDROID.CAMERA];
   
-        // Call our permission service and check for permissions
         const isPermissionGranted = await checkPermission(permissions);
         return isPermissionGranted
     }
@@ -137,9 +99,7 @@ x
     {
         
         const { navigation } = this.props
-        
         request(Platform.OS === 'ios' ? PERMISSIONS.IOS.CAMERA : PERMISSIONS.ANDROID.CAMERA).then((result) => {
-            //setPermissionResult(result)
             if(result == 'granted')
             {
                 permissionService.setEditable('CAMERA',true)
@@ -163,7 +123,9 @@ x
                 }
                 else
                 {
-                    //"No available"
+                    this.settings()
+                    permissionService.setEditable('CAMERA',true)
+
                 }
             }
         });
@@ -218,32 +180,12 @@ x
                                 }}
                             />
                          </View>
-                            
-                     </View>
-
-                 </View>
+                    </View>
+                </View>
             )
         }
-        /*
-        <TouchableOpacity>
-                                 <View style={{ flex:1, alignItems: 'center', justifyContent: 'center' }}>
-                                    <Text style={{ color: '#BFBFBF' }}>Cancel</Text>
-                                 </View>
-                             </TouchableOpacity>
-        */
-        /*
-        <Button
-                                onPress = {() => { 
-                                    permissionService.setEditable('CAMERA', true)
-                                    navigation.navigate(RouteIdentifiers.notificationPermissions.name) 
-                                }}
-                                title = 'Cancel'
-                                color = '#000'
-                            />
-        */
-        
-     }
-   }
+    }
+}
 
   
-  export { CameraPermission }
+export { CameraPermission }

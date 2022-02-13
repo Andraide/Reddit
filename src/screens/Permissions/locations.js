@@ -37,7 +37,6 @@ class LocationPermissions extends React.Component {
          const { navigation } = this.props
          const { editable } = this.state
          
-        
 
          let hasNotch = DeviceInfo.hasNotch();
          this.setState({ hasNotch })
@@ -51,13 +50,6 @@ class LocationPermissions extends React.Component {
              this.setState({ marginNotchTop: StatusBar.currentHeight })
          }
 
-         if(editable)
-         {
-             //navigation.navigate(RouteIdentifiers.home.name)
-         }
-
-         
-
          this.editableLocationSubscribe = permissionService.editableLocation.subscribe( editable => {
             if(editable.toString() == 'true')
             {
@@ -69,30 +61,12 @@ class LocationPermissions extends React.Component {
             }
           })
 
-            this.locationPermissionSubscribe = permissionService.permissionSubscribe.subscribe( permissions => {
-            if(permissions.LOCATION && permissionService.getEditableLocation == false )
-            {
-                permissionService.setEditable('LOCATION', true)
-                //navigation.navigate(RouteIdentifiers.home.name)
-            }
-        })
     }
 
-    componentDidUpdate(prevProps, prevState, snapShot) 
+    componentWillUnmount() 
     {
-        const { navigation } = this.props
-        const { editable } = this.state
-        if(editable && prevState.editable != this.state.editable)
-        {
-            //navigation.navigate(RouteIdentifiers.home.name)
-        }
-    }
-
-     componentWillUnmount() 
-     {
-        this.locationPermissionSubscribe.unsubscribe()
         this.editableLocationSubscribe.unsubscribe()
-     }
+    }
 
      async checkForPermissions()
      {
@@ -101,11 +75,6 @@ class LocationPermissions extends React.Component {
           ? [PERMISSIONS.IOS.LOCATION_ALWAYS]
           : [PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION];
 
-          /*
-          PERMISSIONS.IOS.LOCATION_WHEN_IN_USE
-          */
-  
-        // Call our permission service and check for permissions
         const isPermissionGranted = await checkPermission(permissions);
         return isPermissionGranted
     }
@@ -120,24 +89,18 @@ class LocationPermissions extends React.Component {
         const { navigation } = this.props
         
         requestMultiple(Platform.OS === 'ios' ? [PERMISSIONS.IOS.LOCATION_ALWAYS, PERMISSIONS.IOS.LOCATION_WHEN_IN_USE] : [PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION]).then((results) => {
-            //setPermissionResult(result)
             if(results[PERMISSIONS.IOS.LOCATION_ALWAYS] == 'granted' || results[PERMISSIONS.IOS.LOCATION_WHEN_IN_USE] == 'granted' || results[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION] == 'granted')
             {
-                    //this.setState({ editable: true })
                     permissionService.setPermission('LOCATION', true)
-                    //navigation.navigate(RouteIdentifiers.home.name)
+                    permissionService.setEditable('LOCATION',true)
             }
             else
             {
                 if(results[PERMISSIONS.IOS.LOCATION_ALWAYS] == 'blocked')
                 {
-
-                    //|| checkResult(results[PERMISSIONS.IOS.LOCATION_WHEN_IN_USE]) || checkResult(results[PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION])   
-                    //this.settings()
                     Alert.alert("Please activate locations permissions on settings")
                     this.settings()
                     permissionService.setEditable('LOCATION', true)
-                    //navigation.navigate(RouteIdentifiers.home.name)
                 }
                 else
                 {
@@ -151,7 +114,6 @@ class LocationPermissions extends React.Component {
         const { navigation } = this.props
         const { isPermissionGranted, editable, marginNotchTop } = this.state
         const title = isPermissionGranted ? 'Manage' : 'Allow'
-        console.log("Render", editable)
         if(this.state.editable)
         {
             return (
@@ -173,10 +135,8 @@ class LocationPermissions extends React.Component {
                         </View>
                         <View style={{ flex: 0.7, alignItems: 'center', justifyContent: 'flex-start' }}>
                             <Text style={{ textAlign: 'center' }}>We wants to access your {"\n"} location only to provide a {"\n"} better experience by </Text>
-
                         </View>
-
-                     </View>
+                    </View>
                      <View style={{ flex: 0.1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                          <View style={{ backgroundColor: 'transparent',flex: 0.4, width: widthScreen - 200, alignItems: 'center', justifyContent: 'center', borderRadius: 60 }}>
                             <TouchableOpacity onPress={() => { this.requestPermission() }}>
@@ -191,17 +151,15 @@ class LocationPermissions extends React.Component {
                                 title={'Cancel'} 
                                 onPress={() => {
                                     permissionService.setPermission('LOCATION', true)
-                                    //navigation.navigate(RouteIdentifiers.home.name)
                                 }}
                             />
                          </View>
                      </View>
-
-                 </View>    
+                </View>    
             )
         }
      }
-   }
+}
 
   
-  export default LocationPermissions 
+export default LocationPermissions 

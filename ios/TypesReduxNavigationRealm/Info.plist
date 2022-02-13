@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>TypesReduxNavigationRealm</string>
+	<string>Reddit</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -23,11 +23,11 @@
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>NSCameraUsageDescription</key>
-	<string>YOUR TEXT</string>
+	<string>Allow usage of camera</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>YOUR TEXT</string>
+	<string>Allow usage of your location</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>YOUR TEXT</string>
+	<string>Allow usage of your location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>

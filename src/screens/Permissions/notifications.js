@@ -3,7 +3,7 @@ import { StyleSheet , Modal , View, Button , Text , Image , Dimensions } from 'r
 import { TouchableOpacity ,TouchableHighlight } from 'react-native-gesture-handler'
 import DeviceInfo from 'react-native-device-info';
 import { RouteIdentifiers } from '../../_navigation/rootNavigator'
-import { checkMultiplePermissions, checkResult } from '../../components/checkPermissions'
+import { checkResult } from '../../components/checkPermissions'
 import {
     check,
     request,
@@ -18,11 +18,6 @@ import { permissionService  } from '../../_services/permissions.service'
 import { CancelButton } from '../../components/cancelButton';
 import NotificationImage from '../../_assets/images/notifications/Artwork.png'
 import Enable from '../../_assets/buttons/enable/Button.png'
-
-
-
-
-
 var widthScreen = Dimensions.get('window').width
 var heightScreen = Dimensions.get('window').height
   
@@ -48,17 +43,16 @@ class NotificationPermissions extends React.Component {
         this.setState({ hasNotch })
         if(Platform.OS == 'ios' && hasNotch)
         {
-            
-            this.setState({ marginNotchTop: heightScreen/20 })
+          this.setState({ marginNotchTop: heightScreen/20 })
         }
         else if(hasNotch)
         {
-            this.setState({ marginNotchTop: StatusBar.currentHeight })
+          this.setState({ marginNotchTop: StatusBar.currentHeight })
         }
 
         if(Platform.OS === 'android')
         {
-            navigation.navigate(RouteIdentifiers.locationPermissions.name)
+          navigation.navigate(RouteIdentifiers.locationPermissions.name)
         }
 
         if(editable)
@@ -66,45 +60,9 @@ class NotificationPermissions extends React.Component {
           navigation.navigate(RouteIdentifiers.locationPermissions.name)
         }
 
-        this.editableNotificationsSubscribe = permissionService.editableNotifications.subscribe( editable => {
-          if(editable.toString() == 'true')
-          {
-              this.setState({editable: true})
-          }
-          else
-          {
-              this.setState({editable: false})
-          }
-        })
-         
-        this.notificationsPermissionSubscribe = permissionService.permissionSubscribe.subscribe( permissions => {
-          
-          if(permissions.NOTIFICATIONS && permissionService.getEditableNotifications == false)
-          {
-            permissionService.setEditable('NOTIFICATIONS', true)
-              navigation.navigate(RouteIdentifiers.locationPermissions.name)
-          }
-        })
-        
         let isPermissionGranted = await this.checkForPermissions()
         this.setState({ isPermissionGranted })
     }
-
-    componentDidUpdate(prevProps, prevState, snapShot) 
-    {
-        const { navigation } = this.props
-        const { editable } = this.state
-        if(editable && prevState.editable != this.state.editable)
-        {
-            //navigation.navigate(RouteIdentifiers.locationPermissions.name)
-        }
-    }
-
-     componentWillUnmount() 
-     {
-      this.notificationsPermissionSubscribe.unsubscribe()
-      this.editableNotificationsSubscribe.unsubscribe()
-     }
 
     async checkForPermissions()
     {
@@ -128,32 +86,32 @@ class NotificationPermissions extends React.Component {
         
         requestNotifications(['alert', 'sound']).then(({ status, settings }) => 
         {
+          console.log("STATUS", status)
           if(status == 'granted')
             {
               permissionService.setEditable('NOTIFICATIONS', true)
+              permissionService.setPermission('NOTIFICATIONS', true)
               navigation.navigate(RouteIdentifiers.locationPermissions.name)
-                
             }
             else
             {
                 if(checkResult(status))
                 {
                     this.settings()
+                    navigation.navigate(RouteIdentifiers.locationPermissions.name)
                 }
                 else
                 {
-                    //"No available"
+                    navigation.navigate(RouteIdentifiers.locationPermissions.name)
                 }
             }
         })
     }
 
-     render() {
-       const { navigation } = this.props
-       const { isPermissionGranted, editable, marginNotchTop } = this.state
-        //const isGranted = this.checkForPermissions()
-        const title = isPermissionGranted ? 'Manage' : 'Allow'
-        console.log("Editable======>", editable)
+    render() {
+      const { navigation } = this.props
+      const { isPermissionGranted, editable, marginNotchTop } = this.state
+      const title = isPermissionGranted ? 'Manage' : 'Allow'
         if(this.state.editable)
         {
           return (
@@ -177,7 +135,6 @@ class NotificationPermissions extends React.Component {
                             <Text style={{ textAlign: 'center' }}>Enable push notifications {"\n"} to let {"\n"} send you personal news {"\n"} and updates</Text>
 
                         </View>
-
                      </View>
                      <View style={{ flex: 0.1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                          <View style={{ backgroundColor: 'transparent',flex: 0.4, width: widthScreen - 200, alignItems: 'center', justifyContent: 'center', borderRadius: 60 }}>
@@ -197,15 +154,12 @@ class NotificationPermissions extends React.Component {
                             }}
                           />
                          </View>
-                            
-                     </View>
-
-                 </View>
+                      </View>
+            </View>
           )
         }
-       
-     }
+      }
    
-   }
+}
   
-  export { NotificationPermissions }
+export { NotificationPermissions }

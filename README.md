@@ -1,15 +1,26 @@
-:: To acomplish
 
-- Stack navigation (Done) 
-- Loading screen between screens with navigation
-- Redux on two screens
-- Realm
-- Project structure
-- Hocs (Intro)
-- Types
-- Flavors
-- This -> That
+<p align="center">
+    <img src="AppPreview.gif" alt="animated"/>
+</p>
 
-:: Project structure (React native struture)
-:: Notes 
-- Please document any third-party library used in the project.
+
+# Reddit memes app
+
+
+> Install dependecies and Start Metro
+
+```shell
+npm i && npm start
+```
+
+> Run on Android emulator
+
+```shell
+npm run android
+```
+
+> Run on IOS simulator
+
+```shell
+npm run ios
+```

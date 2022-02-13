@@ -7,6 +7,7 @@
   import DeviceInfo from 'react-native-device-info';
   import Bitmap from '../../_assets/buttons/configuration/Bitmap.png' 
   import { memesService } from '../../_services/memes.service'
+  import { permissionService } from '../../_services/permissions.service';
   import ArrowUp from '../../_assets/arrows/up/186407-512.png'
   import ArrowDown from '../../_assets/arrows/down/186407-512.png'
   import CommentsIcon from '../../_assets/comments/comment.png'
@@ -17,7 +18,7 @@
   
   
   const renderItem = ({ item }) => {
-    console.log("Flatlist")
+    
     const { post_hint, title, url, score } = item.data
     if(post_hint == 'image' && url)
     {
@@ -45,8 +46,6 @@
                                 source={ArrowDown}
                             />
                         </View>
-
-
                     </View>
                     <View style={{ flex: 0.05 }}></View>
                     <View style={{ flex: 0.77, backgroundColor: 'transparent' }}><Text adjustsFontSizeToFit={true} style={{ fontSize: 20 }}>{title}</Text></View>
@@ -91,12 +90,9 @@
                     </View>
 
                 </View>
-
             </View> 
         )
-    
-    
-  };
+    };
 
 
 
@@ -105,20 +101,19 @@
     constructor(props) {
       super(props)
     
-      this.state = { 
-  
-        visible: true,
-        hasNotch: false,
-        noResults: false,
-        marginNotchTop: 0,
-        memes: null,
-        search: null,
-        refresh: false 
-  
-      }
+        this.state = { 
+    
+            visible: true,
+            hasNotch: false,
+            noResults: false,
+            marginNotchTop: 0,
+            memes: null,
+            search: null,
+            refresh: false 
+        }
 
 
-      this.handleChangeText = this.handleChangeText.bind(this)
+        this.handleChangeText = this.handleChangeText.bind(this)
 
       
     }
@@ -130,7 +125,6 @@
         this.setState({ hasNotch })
         if(Platform.OS == 'ios' && hasNotch)
         {
-            
             this.setState({ marginNotchTop: heightScreen/20 })
         }
         else if(hasNotch)
@@ -141,7 +135,20 @@
         memesService.getMemes().then((memes) => {
             
             const { data } = memes
-            this.setState({ memes: data.children, noResults: false })
+            let dataImages = data.children.filter(x => {
+                const { post_hint } = x.data
+                console.log(post_hint)
+                if(post_hint == 'image')
+                {
+                    return true
+                }
+                else
+                {
+                    return false
+                }
+            })
+
+            this.setState({ memes: dataImages, noResults: false })
         })
 
         
@@ -161,7 +168,20 @@
                 }
                 else
                 {
-                    this.setState({ memes: data.children, noResults: false })
+                    let dataImages = data.children.filter(x => {
+                        const { post_hint } = x.data
+                        console.log(post_hint)
+                        if(post_hint == 'image')
+                        {
+                            
+                            return true
+                        }
+                        else
+                        {
+                            return false
+                        }
+                    })
+                    this.setState({ memes: dataImages, noResults: false })
                     
                 }
             })
@@ -172,7 +192,20 @@
             memesService.getMemes().then((memes) => {
             
                 const { data } = memes
-                this.setState({ memes: data.children, noResults: false })
+                let dataImages = data.children.filter(x => {
+                    const { post_hint } = x.data
+                    console.log(post_hint)
+                    if(post_hint == 'image')
+                    {
+                        
+                        return true
+                    }
+                    else
+                    {
+                        return false
+                    }
+                })
+                this.setState({ memes: dataImages, noResults: false })
             })
         }
     }
@@ -185,16 +218,23 @@
     render() {
         const { navigation } = this.props
         const { hasNotch, marginNotchTop, memes, noResults } = this.state
-        //console.log("Memes", memes)
      
         return (
                <View style={{ flex: 1, backgroundColor: '#FFFFFF', flexDirection: 'column', marginTop: marginNotchTop }}>
                   <View style={{ flex: 0.05, backgroundColor: 'transparent', flexDirection: 'row' }}>
+                      
                       <View style= {{ flex: 0.2, justifyContent: 'center', alignItems: 'center' }}>
+                      <TouchableOpacity onPress={() => {
+                                    permissionService.setEditable('CAMERA', false)
+                                    permissionService.setEditable('NOTIFICATIONS', false)
+                                    permissionService.setEditable('LOCATION', false)
+                        }}
+                      >
                         <Image
                         source={Bitmap}
                         ></Image>
-                      </View>
+                      </TouchableOpacity>
+                    </View>
                       <View style= {{ flex: 0.8 }}>
                       </View>
                   </View>

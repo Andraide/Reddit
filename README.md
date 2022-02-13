@@ -19,8 +19,9 @@ npm i && npm start
 npm run android
 ```
 
-> Run on IOS simulator
+> Intall pods and Run on IOS simulator
 
 ```shell
-npm run ios
+ cd ios && pod install
+ npm run ios
 ```

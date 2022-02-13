@@ -12,6 +12,7 @@ import {
     PERMISSIONS,
     openSettings
   } from 'react-native-permissions';
+import { styles } from './style';
 import { permissionService  } from '../../_services/permissions.service'
 import { CancelButton } from '../../components/cancelButton';
 import LocationImage from '../../_assets/images/locations/Artwork.png'
@@ -31,7 +32,6 @@ class LocationPermissions extends React.Component {
      }
 
      
-    
     async componentDidMount() 
     {
          const { navigation } = this.props
@@ -123,7 +123,49 @@ class LocationPermissions extends React.Component {
         else
         {
             return (
-                <View style={{ flex: 1, flexDirection: 'column', marginTop: marginNotchTop }}>
+                   <View style={{ flex: 1, flexDirection: 'column', marginTop: marginNotchTop }}>
+                     <View style={{ flex: 0.6, alignItems: 'center', justifyContent: 'center' }}>
+                         <Image
+                            source={LocationImage}
+                         />
+                     </View>
+                     <View style={{ flex: 0.2, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                        <View style={{ flex: 0.3, alignItems: 'center', justifyContent: 'center' }}>
+                            <Text style={{ textAlign: 'center', fontSize: 20 }}>Enable location services</Text>
+                        </View>
+                        <View style={{ flex: 0.7, alignItems: 'center', justifyContent: 'flex-start' }}>
+                            <Text style={{ textAlign: 'center' }}>We wants to access your {"\n"} location only to provide a {"\n"} better experience by </Text>
+                        </View>
+                     </View>
+                     <View style={{ flex: 0.1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                         <View style={{ backgroundColor: 'transparent',flex: 0.4, width: widthScreen - 200, alignItems: 'center', justifyContent: 'center', borderRadius: 60 }}>
+                            <TouchableOpacity onPress={() => { this.requestPermission() }}>
+                                <Image
+                                    source={Enable}
+                                />
+                            </TouchableOpacity>
+                         </View>
+                         <View style={{ flex: 0.2 }}></View>
+                         <View style={{ flex: 0.4,alignItems: 'center', justifyContent: 'center' }}>
+                             <CancelButton 
+                                title={'Cancel'} 
+                                onPress={() => {
+                                    permissionService.setPermission('LOCATION', true)
+                                }}
+                            />
+                         </View>
+                    </View>
+                </View>
+            )
+        }
+     }
+}
+
+  
+export default LocationPermissions 
+
+/*
+<View style={{ flex: 1, flexDirection: 'column', marginTop: marginNotchTop }}>
                      <View style={{ flex: 0.6, alignItems: 'center', justifyContent: 'center' }}>
                          <Image
                             source={LocationImage}
@@ -155,11 +197,5 @@ class LocationPermissions extends React.Component {
                             />
                          </View>
                      </View>
-                </View>    
-            )
-        }
-     }
-}
-
-  
-export default LocationPermissions 
+                </View> 
+*/

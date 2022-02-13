@@ -14,6 +14,7 @@ import {
     requestNotifications,
     checkNotifications
   } from 'react-native-permissions';
+import { styles } from './style'
 import { permissionService  } from '../../_services/permissions.service'
 import { CancelButton } from '../../components/cancelButton';
 import NotificationImage from '../../_assets/images/notifications/Artwork.png'
@@ -86,7 +87,6 @@ class NotificationPermissions extends React.Component {
         
         requestNotifications(['alert', 'sound']).then(({ status, settings }) => 
         {
-          console.log("STATUS", status)
           if(status == 'granted')
             {
               permissionService.setEditable('NOTIFICATIONS', true)
@@ -121,31 +121,31 @@ class NotificationPermissions extends React.Component {
         else
         {
           return (
-            <View style={{ flex: 1, flexDirection: 'column', marginTop: marginNotchTop }}>
-                     <View style={{ flex: 0.6, alignItems: 'center', justifyContent: 'center' }}>
+            <View style={[styles.container, { marginTop: marginNotchTop }]}>
+                     <View style={styles.containerOne}>
                          <Image
                             source={NotificationImage}
                          />
                      </View>
-                     <View style={{ flex: 0.2, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                        <View style={{ flex: 0.3, alignItems: 'center', justifyContent: 'center' }}>
-                            <Text style={{ textAlign: 'center', fontSize: 20 }}>Enable push notifications</Text>
+                     <View style={styles.containerThree}>
+                        <View style={styles.childContainerThree}>
+                            <Text style={styles.text}>Enable push notifications</Text>
                         </View>
-                        <View style={{ flex: 0.7, alignItems: 'center', justifyContent: 'flex-start' }}>
-                            <Text style={{ textAlign: 'center' }}>Enable push notifications {"\n"} to let {"\n"} send you personal news {"\n"} and updates</Text>
+                        <View style={styles.childContainerThreeOne}>
+                            <Text style={styles.textOne}>Enable push notifications {"\n"} to let {"\n"} send you personal news {"\n"} and updates</Text>
 
                         </View>
                      </View>
-                     <View style={{ flex: 0.1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                         <View style={{ backgroundColor: 'transparent',flex: 0.4, width: widthScreen - 200, alignItems: 'center', justifyContent: 'center', borderRadius: 60 }}>
+                     <View style={styles.containerFour}>
+                         <View style={styles.childContainerFour}>
                             <TouchableOpacity onPress={() => { this.requestPermission() }}>
                                 <Image
                                     source={Enable}
                                 />
                             </TouchableOpacity>
                          </View>
-                         <View style={{ flex: 0.2 }}></View>
-                         <View style={{ flex: 0.4, alignItems: 'center', justifyContent: 'center' }}>
+                         <View style={styles.childContainerFourOne}></View>
+                         <View style={styles.childContainerFourTwo}>
                           <CancelButton 
                             title={'Cancel'} 
                             onPress={() => {
@@ -154,12 +154,11 @@ class NotificationPermissions extends React.Component {
                             }}
                           />
                          </View>
-                      </View>
+                    </View>
             </View>
           )
         }
       }
-   
 }
   
 export { NotificationPermissions }

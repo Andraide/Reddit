@@ -12,7 +12,7 @@
   import ArrowDown from '../../_assets/arrows/down/186407-512.png'
   import CommentsIcon from '../../_assets/comments/comment.png'
   import NoResultsImage from '../../_assets/images/no-results/Artwork.png'
-
+  import { styles } from './style'
   var widthScreen = Dimensions.get('window').width
   var heightScreen = Dimensions.get('window').height
   
@@ -23,46 +23,44 @@
     if(post_hint == 'image' && url)
     {
         return ( 
-            <View style={{ flex: 1, backgroundColor: 'transparent', flexDirection: 'column', height: heightScreen/3, width: widthScreen - 40, alignItems: 'center', justifyContent: 'center', marginTop: 20, borderRadius: 20, borderColor: '#000', borderWidth: 0.1 }}>
-                <View style={{ flex: 0.65, backgroundColor: 'transparent', alignItems: 'center', justifyContent: 'center', width: widthScreen - 40, borderRadius: 20 }}>
+            <View style={styles.renderItemContainer}>
+                <View style={styles.childContainer}>
                 <Image
                     source={{uri: url}}
                     style={{ flex: 1, width: widthScreen - 40, borderTopRightRadius: 20, borderTopLeftRadius: 20 }}
                     resizeMode = 'stretch'
                 />  
                 </View>
-                <View style={{ flex: 0.05 }}></View>
-                <View style={{ flex: 0.2, backgroundColor: 'transparent', flexDirection: 'row', alignItems: 'flex-start' }}>
-                    <View style={{ flex: 0.12, backgroundColor: 'transparent', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                        <View style={{ flex: 0.12, alignItems: 'center', justifyContent: 'center' }}>
+                <View style={styles.paddingFlex}></View>
+                <View style={styles.childContainerOne}>
+                    <View style={styles.childContainerOneChildContainer}>
+                        <View style={styles.arrowUp}>
                             <Image
                                 source={ArrowUp}
                             />
-
                         </View>
-                        <View style={{ flex: 0.6, alignItems: 'center', justifyContent: 'center' }}><Text>{score}</Text></View>
-                        <View style={{ flex: 0.2 }}>
+                        <View style={styles.text}><Text>{score}</Text></View>
+                        <View style={styles.paddingFlexOne}>
                             <Image
                                 source={ArrowDown}
                             />
                         </View>
                     </View>
-                    <View style={{ flex: 0.05 }}></View>
-                    <View style={{ flex: 0.77, backgroundColor: 'transparent' }}><Text adjustsFontSizeToFit={true} style={{ fontSize: 20 }}>{title}</Text></View>
+                    <View style={styles.paddingFlexTwo}></View>
+                    <View style={styles.childContainerOneChildOneContainer}><Text adjustsFontSizeToFit={true} style={{ fontSize: 20 }}>{title}</Text></View>
                 </View>
-                <View style={{ flex: 0.1, flexDirection: 'row', alignItems: 'flex-start' }}>
-                    <View style={{ flex: 0.17 }}></View>
-                    <View style={{ flex: 0.77, flexDirection: 'row', alignItems: 'center', backgroundColor: 'transparent' }}>
+                <View style={styles.childContainerTwo}>
+                    <View style={styles.paddingFlexThree}></View>
+                    <View style={styles.childContainerTwoContainer}>
                         <View style={{ flex: 0.1 }}>
                             <Image
                                 source={CommentsIcon}
                             />
                         </View>
-                        <View style={{ flex: 0.1, backgroundColor: 'transparent' }}>
+                        <View style={styles.score}>
                             <Text>{score}</Text>
                         </View>
-                        <View style={{ flex: 0.8 }}></View>
-
+                        <View style={styles.paddingFlexScore}></View>
                     </View>
                 </View>
             </View> 
@@ -75,20 +73,19 @@
   const renderItemVoid = ({ item }) => {
     
         return ( 
-            <View style={{flex: 1, backgroundColor: 'white', flexDirection: 'column', height: heightScreen/2, width: widthScreen - 40, alignItems: 'center', justifyContent: 'center', marginTop: 20, borderRadius: 20 }}>
-                <View style={{ flex: 0.7 }}>
+            <View style={styles.renderItemVoidContainer}>
+                <View style={styles.childContainerV}>
                     <Image
                         source={NoResultsImage}
                     />
                 </View>
-                <View style={{ flex: 0.3, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                    <View style={{ flex: 0.5, alignItems: 'center',  justifyContent: 'center'}}>
-                        <Text style={{ fontSize: 25 }}>No Results</Text>
+                <View style={styles.childContainerOneV}>
+                    <View style={styles.childContainerTextContainerV}>
+                        <Text style={styles.textRenderItemVoid}>No Results</Text>
                     </View>
-                    <View style={{ flex: 0.5, alignItems: 'center',  justifyContent: 'center'}}>
-                        <Text style={{ fontSize: 15, textAlign: 'center' }}>Sorry, there are no results for this search, Please try another phrase</Text>
+                    <View style={styles.childContainerTextContainerOneV}>
+                        <Text style={styles.textRenderItemVoidOne}>Sorry, there are no results for this search, Please try another phrase</Text>
                     </View>
-
                 </View>
             </View> 
         )
@@ -150,9 +147,6 @@
 
             this.setState({ memes: dataImages, noResults: false })
         })
-
-        
-  
     }
 
     componentDidUpdate(prevProps, prevState, snapShot)
@@ -220,10 +214,9 @@
         const { hasNotch, marginNotchTop, memes, noResults } = this.state
      
         return (
-               <View style={{ flex: 1, backgroundColor: '#FFFFFF', flexDirection: 'column', marginTop: marginNotchTop }}>
-                  <View style={{ flex: 0.05, backgroundColor: 'transparent', flexDirection: 'row' }}>
-                      
-                      <View style= {{ flex: 0.2, justifyContent: 'center', alignItems: 'center' }}>
+               <View style={[styles.containerRender, { marginTop: marginNotchTop }]}>
+                  <View style={styles.childContainerRender}>
+                      <View style= {styles.configurationContainer}>
                       <TouchableOpacity onPress={() => {
                                     permissionService.setEditable('CAMERA', false)
                                     permissionService.setEditable('NOTIFICATIONS', false)
@@ -235,17 +228,17 @@
                         ></Image>
                       </TouchableOpacity>
                     </View>
-                      <View style= {{ flex: 0.8 }}>
+                      <View style= {styles.paddingFlexConfiguration}>
                       </View>
                   </View>
-                  <View style={{ flex: 0.08, backgroundColor: 'transparent', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+                  <View style={styles.childContainerRenderOne}>
                     <SearchBar
                         placeholder="Search here"
                         onChangeText={this.handleChangeText}
                         onClearPress={() => this.setState({ refresh: !this.state.refresh})}
                     />
                   </View>
-                  <View style={{ flex: 0.87, backgroundColor: 'transparent', justifyContent: 'center', alignItems: 'center' }}>
+                  <View style={styles.childContainerRenderTwo}>
                     {memes && <FlatList
                         data={memes}
                         renderItem={renderItem}

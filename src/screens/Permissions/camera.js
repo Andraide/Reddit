@@ -12,6 +12,7 @@ import {
     PERMISSIONS,
     openSettings
   } from 'react-native-permissions';
+import { styles } from './style';
 import { permissionService  } from '../../_services/permissions.service'
 import { CancelButton } from '../../components/cancelButton';
 import Allow from '../../_assets/buttons/allow/Button.png'
@@ -62,11 +63,11 @@ class CameraPermission extends React.Component {
                 permissionService.setEditable('CAMERA', true)
                 if(Platform.OS === 'android')
                 {
-                    //navigation.navigate(RouteIdentifiers.locationPermissions.name)
+                    navigation.navigate(RouteIdentifiers.locationPermissions.name)
                 }
                 else
                 {
-                    //navigation.navigate(RouteIdentifiers.notificationPermissions.name)
+                    navigation.navigate(RouteIdentifiers.notificationPermissions.name)
                 }
             }
         })
@@ -146,7 +147,52 @@ class CameraPermission extends React.Component {
         else
         {
             return (
-                 <View style={{ flex: 1, flexDirection: 'column', marginTop: marginNotchTop }}>
+                 <View style={[styles.container, { marginTop: marginNotchTop }]}>
+                     <View style={styles.containerOne}>
+                         <Image
+                            source={CameraImage}
+                         />
+                     </View>
+                     <View style={styles.containerThree}>
+                        <View style={styles.childContainerThree}>
+                            <Text style={styles.text}>Camera Access</Text>
+                        </View>
+                        <View style={styles.childContainerThreeOne}>
+                            <Text style={styles.textOne}>Please allow access to {"\n"} your camera to take {"\n"} photos</Text>
+
+                        </View>
+                     </View>
+                     <View style={styles.containerFour}>
+                         <View style={styles.childContainerFour}>
+                            <TouchableOpacity onPress={() => { this.requestPermission() }}>
+                                <Image
+                                    source={Allow}
+                                />
+                            </TouchableOpacity>
+                         </View>
+                         <View style={styles.childContainerFourOne}></View>
+                         <View style={styles.childContainerFourTwo}>
+                          <CancelButton 
+                            title={'Cancel'} 
+                            onPress={() => {
+                                permissionService.setEditable('CAMERA', true)
+                                navigation.navigate(RouteIdentifiers.notificationPermissions.name)
+                            }}
+                          />
+                         </View>
+                    </View>
+            </View>
+            )
+        }
+    }
+}
+
+  
+export { CameraPermission }
+
+
+/*
+<View style={{ flex: 1, flexDirection: 'column', marginTop: marginNotchTop }}>
                      <View style={{ flex: 0.6, alignItems: 'center', justifyContent: 'center' }}>
                          <Image
                             source={CameraImage}
@@ -182,10 +228,4 @@ class CameraPermission extends React.Component {
                          </View>
                     </View>
                 </View>
-            )
-        }
-    }
-}
-
-  
-export { CameraPermission }
+*/

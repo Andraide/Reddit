@@ -1,25 +1,7 @@
 
-
-
-
-/*function mapStateToProps(state, props) {
-    return {
-      filterPostData: state.homeDashboardConfig.filterPostData,
-      filterApplied: state.homeDashboardConfig.filterApplied,
-      homeDashboardRefresh: state.homeDashboardConfig.homeDashboardRefresh
-    };
-  }
-  function mapDispatchToProps(dispatch) { return bindActionCreators(Actions, dispatch); }
-  export default connect(mapStateToProps, mapDispatchToProps)(HomeDashboard);
-
-  */
-
-
   import React from 'react'
   import { StyleSheet, Modal, View, Button, Text, Image, Dimensions, StatusBar, Platform, FlatList } from 'react-native'
   import { TouchableOpacity ,TouchableHighlight } from 'react-native-gesture-handler'
-  //import { SearchBar } from 'react-native-elements';
-  import SearchInput from '../../components/searchInput'
   import SearchBar from "react-native-dynamic-search-bar"
   import { RouteIdentifiers } from '../../_navigation/rootNavigator';
   import DeviceInfo from 'react-native-device-info';
@@ -30,8 +12,6 @@
   import CommentsIcon from '../../_assets/comments/comment.png'
   import NoResultsImage from '../../_assets/images/no-results/Artwork.png'
 
-//import SearchBar from 'react-native-elements/dist/searchbar/SearchBar-ios';
-  //import hoc from '../../_hocs/loading'
   var widthScreen = Dimensions.get('window').width
   var heightScreen = Dimensions.get('window').height
   
@@ -42,7 +22,7 @@
     if(post_hint == 'image' && url)
     {
         return ( 
-            <View style={{ flex: 1, backgroundColor: 'white', flexDirection: 'column', height: heightScreen/3, width: widthScreen - 40, alignItems: 'center', justifyContent: 'center', marginTop: 20, borderRadius: 20 }}>
+            <View style={{ flex: 1, backgroundColor: '#FFFFFF', flexDirection: 'column', height: heightScreen/3, width: widthScreen - 40, alignItems: 'center', justifyContent: 'center', marginTop: 20, borderRadius: 20, borderColo: '#000', borderWidth: 0.1 }}>
                 <View style={{ flex: 0.65, backgroundColor: 'transparent', alignItems: 'center', justifyContent: 'center', width: widthScreen - 40, borderRadius: 20 }}>
                 <Image
                     source={{uri: url}}
@@ -51,7 +31,7 @@
                 />  
                 </View>
                 <View style={{ flex: 0.05 }}></View>
-                <View style={{ flex: 0.2, flexDirection: 'row', alignItems: 'flex-start' }}>
+                <View style={{ flex: 0.2, backgroundColor: 'transparent', flexDirection: 'row', alignItems: 'flex-start' }}>
                     <View style={{ flex: 0.1, backgroundColor: 'transparent', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                         <View style={{ flex: 0.12, alignItems: 'center', justifyContent: 'center' }}>
                             <Image
@@ -68,7 +48,7 @@
 
 
                     </View>
-                    <View style={{ flex: 0.9 }}><Text style={{ fontSize: 20 }}>{title}</Text></View>
+                    <View style={{ flex: 0.9, backgroundColor: 'transparent' }}><Text adjustsFontSizeToFit={true} style={{ fontSize: 20 }}>{title}</Text></View>
                 </View>
                 <View style={{ flex: 0.1, flexDirection: 'row', alignItems: 'flex-start' }}>
                     <View style={{ flex: 0.1 }}></View>
@@ -168,16 +148,8 @@
         const { search } = this.state
         if(this.state.search != prevState.search)
         {
-            console.log("Update!")
             memesService.getMemesByFilter(search).then((memes) => {
-                /*console.log(memes.data.children.length)
-                if(memes.data.children.length == 0)
-                {
-                    console.log("Seeting null!!!!!")
-                    this.setState({ memes: null })
-                }*/
                 const { data } = memes
-                console.log("DATA", Object.keys(data.children), data.children.length)
                 if(data.children.length == 0)
                 {
                     this.setState({ memes: [], noResults: true })
@@ -200,36 +172,16 @@
         }
     }
   
-    componentWillUnmount() {
-  
-      
-      
-    }
-
-    renderMemes(meme) 
-    {
-        //const { memes } = this.state
-        return (
-             
-            <View><Text>Meme</Text></View>
-        )
-    }
-
-
     handleChangeText(search)
     {
         this.setState({ search })
     }
 
-
-  
     render() {
-     const { navigation } = this.props
-     const { hasNotch, marginNotchTop, memes, noResults } = this.state
-     //console.log(Object.keys(memes))
-        console.log("Memes ====>", memes, typeof(memes), noResults)
+        const { navigation } = this.props
+        const { hasNotch, marginNotchTop, memes, noResults } = this.state
      
-     return (
+        return (
                <View style={{ flex: 1, backgroundColor: '#FFFFFF', flexDirection: 'column', marginTop: marginNotchTop }}>
                   <View style={{ flex: 0.05, backgroundColor: 'transparent', flexDirection: 'row' }}>
                       <View style= {{ flex: 0.2, justifyContent: 'center', alignItems: 'center' }}>
@@ -258,21 +210,10 @@
                         renderItem={renderItem}
                         keyExtractor={item => item.id}
                     />}
-                    
-    
                 </View>
-
-
-               </View>
+            </View>
        )
      }
+  }
   
-   }
-  /*
-  <FlatList
-                        data={memes}
-                        renderItem={this.renderMemes()}
-                        keyExtractor={item => item.id}
-                      />
-  */
   export { Home }

@@ -3,11 +3,11 @@ import { CommonActions, Route, RouteProp } from '@react-navigation/native';
 import { createStackNavigator, StackNavigationOptions, CardStyleInterpolators, TransitionPresets } from '@react-navigation/stack';
 import { createBottomTabNavigator, BottomTabNavigationOptions } from '@react-navigation/bottom-tabs';
 import { TransitionSpec, StackCardStyleInterpolator } from '@react-navigation/stack/lib/typescript/src/types';
-import { NavigationParams } from 'react-navigation';
 import globalStyles from '../styles/globalStyles';
 import ActivityIndicator from '../components/activityIndicator'
 import colours from '../styles/colours'
 import Hoc from '../_hocs/loading'
+import { NavigationContainer } from '@react-navigation/native';
 
 import {
     Animated,

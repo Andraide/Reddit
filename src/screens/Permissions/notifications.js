@@ -71,7 +71,7 @@ class NotificationPermissions extends React.Component {
         const { editable } = this.state
         if(editable && prevState.editable != this.state.editable)
         {
-            navigation.navigate(RouteIdentifiers.locationPermissions.name)
+            //navigation.navigate(RouteIdentifiers.locationPermissions.name)
         }
     }
 
